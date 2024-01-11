@@ -5,7 +5,6 @@ import matplotlib.pyplot as plt
 import io
 import requests
 
-
 def get_graph_pts(player_id, player_name, stat, graph):
     url = f'https://www.basketball-reference.com/players/t/{player_id}/gamelog/2024'
 
@@ -33,7 +32,7 @@ def get_graph_pts(player_id, player_name, stat, graph):
         plt.figure(figsize=(10, 8))  # Tamaño del gráfico
         if graph=="bar":
             bars = plt.bar(dataframe_filtrado['Date'], dataframe_filtrado[f'{stat}'], width=0.8,
-                           )  # Gráfico de barras horizontal
+                           color="#23D160")  # Gráfico de barras horizontal
             plt.title(f'{stat} by games - {player_name}')  # Título del gráfico
             plt.xlabel('Fecha')
             plt.ylabel(f'{stat}')  # Etiqueta del eje x

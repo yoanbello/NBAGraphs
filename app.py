@@ -5,10 +5,14 @@ app = Flask(__name__)
 
 
 @app.route('/')
-def index():  # put application's code here
+def index(): # put application's code here
+    return render_template('index.html')
+
+@app.route('/players/')
+def players():  # put application's code here
     players = get_all_players()
     players = list(chunks(players, 100))
-    return render_template('index.html', players=players)
+    return render_template('players.html', players=players)
 
 @app.route('/players/<player_id>/<player_name>/<stat>/<graph>/')
 def player_details(player_id, player_name, stat, graph):
