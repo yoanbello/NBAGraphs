@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Player Details</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.9.4/css/bulma.min.css">
+</head>
+<body>
+    <nav class="navbar is-link" role="navigation" aria-label="main navigation">
+      <div class="navbar-brand">
+          <div class="navbar-item">
+                <strong style="color: white"><em>NBAGraphs</em></strong>
+          </div>
+      </div>
+
+  <div id="navbarBasicExample" class="navbar-menu">
+    <div class="navbar-start">
+      <a href="{{ url_for('index') }}" class="navbar-item">
+        Home
+      </a>
+    </div>
+      <div class="navbar-end">
+      <a class="navbar-item">
+        About
+      </a>
+      <a class="navbar-item">
+         Contact
+      </a>
+    </div>
+  </div>
+</nav>
+    <div class="container mt-4">
+        <a href="{{ url_for('player_details', player_id=player_id, player_name=player_name, stat="PTS", graph="bar") }}" class="button is-link is-light">
+        Puntos
+        </a>
+        <a href="{{ url_for('player_details', player_id=player_id, player_name=player_name, stat="TRB", graph="bar") }}"  class="button is-link is-light">
+        Rebotes
+        </a>
+        <a href="{{ url_for('player_details', player_id=player_id, player_name=player_name, stat="AST", graph="bar") }}"  class="button is-link is-light">
+        Asistencias
+        </a>
+        <div class="is-fullwidth">
+            <figure class="image" >
+                <img src="data:image/png;base64,{{ img_base64 }}" alt="Player Image">
+            </figure>
+        </div>
+    </div>
+</body>
+</html>

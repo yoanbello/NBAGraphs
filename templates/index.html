@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>List of Players</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="https://bulma.io/vendor/fontawesome-free-5.15.2-web/css/all.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.9.4/css/bulma.min.css">
+    <style>
+        .a-list{
+            display: block;
+        }
+        .site-name {
+      font-weight: bold;
+      font-style: italic;
+    }  .player-options {
+      display: none;
+      padding: 10px;
+    }
+
+    </style>
+</head>
+<body>
+    <nav class="navbar is-link" role="navigation" aria-label="main navigation">
+      <div class="navbar-brand">
+          <div class="navbar-item">
+                <strong style="color: white"><em>NBAGraphs</em></strong>
+          </div>
+      </div>
+
+  <div id="navbarBasicExample" class="navbar-menu">
+    <div class="navbar-start">
+      <a href="{{ url_for('index') }}" class="navbar-item">
+        Home
+      </a>
+    </div>
+      <div class="navbar-end">
+      <a class="navbar-item">
+        About
+      </a>
+      <a class="navbar-item">
+         Contact
+      </a>
+    </div>
+  </div>
+</nav>
+    <div class="container mt-4">
+    <h4 class="title is-4">All Players This Season</h4>
+  <div class="columns is-mobile">
+    {% for player in players %}
+      <div class="column">
+        {% for player_id, player_name in player %}
+          <!-- Agrega la clase 'dropdown' al contenedor del enlace -->
+          <div class="dropdown is-hoverable mb-2 is-info">
+            <div class="dropdown-trigger">
+              <!-- Agrega la clase 'button' al contenedor y 'toggle-options' al enlace -->
+              <div class="button is-link is-light" aria-haspopup="true" aria-controls="dropdown-menu2" data-player="{{ player_id }}">
+                <span>{{ player_name }}</span>
+                <!-- Agrega las clases para el icono de la flecha -->
+                <span class="icon is-small">
+                   <i class="fas fa-angle-down" aria-hidden="true"></i>
+                </span>
+              </div>
+            </div>
+            <!-- Agrega la clase 'dropdown-menu' al menú de opciones -->
+            <div class="dropdown-menu" id="{{ player_id }}" role="menu">
+              <div class="dropdown-content">
+                <!-- Enlaces a diferentes opciones, por ejemplo, estadísticas -->
+                <a  href="{{ url_for('player_details', player_id=player_id, player_name=player_name, stat="PTS", graph="bar") }}">Puntos</a>
+                <a href="{{ url_for('player_details', player_id=player_id, player_name=player_name, stat="TRB", graph="bar") }}">Rebotes</a>
+                  <a href="{{ url_for('player_details', player_id=player_id, player_name=player_name, stat="AST", graph="bar") }}">Asistencias</a>
+                  <a href="{{ url_for('player_details', player_id=player_id, player_name=player_name, stat="FGA", graph="bar") }}">FGA</a>
+                <!-- Puedes agregar más enlaces según sea necesario -->
+              </div>
+            </div>
+          </div>
+        {% endfor %}
+      </div>
+    {% endfor %}
+  </div>
+</div>
+
+
+
+<script>
+  // Agrega un evento de clic a todos los enlaces con la clase 'toggle-options'
+  document.querySelectorAll('.toggle-options').forEach(function (link) {
+    link.addEventListener('click', function (event) {
+      // Evita el comportamiento predeterminado del enlace
+      event.preventDefault();
+
+      // Obtiene el id del jugador desde el atributo 'data-player'
+      var playerId = link.getAttribute('data-player');
+
+      // Obtiene el elemento de las opciones adicionales del jugador correspondiente
+      var playerOptions = document.getElementById(playerId);
+
+      // Cambia la visibilidad de las opciones adicionales del jugador
+      if (playerOptions.style.display === 'block') {
+        playerOptions.style.display = 'none';
+      } else {
+        playerOptions.style.display = 'block';
+      }
+    });
+  });
+</script>
+
+</body>
+</html>
+
+
