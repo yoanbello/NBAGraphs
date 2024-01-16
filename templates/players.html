@@ -24,39 +24,43 @@
 
 <div class="container mt-4">
   <div class="columns is-mobile">
-
       <div class="column">
         {% for player_id, player_name in players %}
           <!-- Agrega la clase 'dropdown' al contenedor del enlace -->
-          <div class="dropdown is-hoverable mb-2">
+          <div class="dropdown mb-2" id="{{ player_id }}">
             <div class="dropdown-trigger">
-              <!-- Agrega la clase 'button' al contenedor y 'toggle-options' al enlace -->
-              <div class="button" aria-haspopup="true" aria-controls="dropdown-menu2">
+              <button class="button" aria-haspopup="true" aria-controls="dropdown-menu" onclick="handleDropdownClick('{{ player_id }}')" >
                 <span>{{ player_name }}</span>
                 <!-- Agrega las clases para el icono de la flecha -->
                 <span class="icon is-small">
                    <i class="fas fa-angle-down" aria-hidden="true"></i>
                 </span>
-              </div>
+              </button>
             </div>
-            <!-- Agrega la clase 'dropdown-menu' al menú de opciones -->
-            <div class="dropdown-menu" id="{{ player_id }}" role="menu">
+            <div class="dropdown-menu" role="menu" id="dropdown-menu" >
               <div class="dropdown-content">
-                <!-- Enlaces a diferentes opciones, por ejemplo, estadísticas -->
-                <a class="dropdown-item"  href="{{ url_for('player_details', player_id=player_id, player_name=player_name, stat="PTS", graph="bar") }}">Puntos</a>
-                <a class="dropdown-item" href="{{ url_for('player_details', player_id=player_id, player_name=player_name, stat="TRB", graph="bar") }}">Rebotes</a>
+                  <a class="dropdown-item"  href="{{ url_for('player_details', player_id=player_id, player_name=player_name, stat="PTS", graph="bar") }}">Puntos</a>
+                  <a class="dropdown-item" href="{{ url_for('player_details', player_id=player_id, player_name=player_name, stat="TRB", graph="bar") }}">Rebotes</a>
                   <a class="dropdown-item" href="{{ url_for('player_details', player_id=player_id, player_name=player_name, stat="AST", graph="bar") }}">Asistencias</a>
                   <a class="dropdown-item" href="{{ url_for('last_five_games_stats', player_id=player_id, player_name=player_name) }}">Stats Last 5 Games</a>
-                <!-- Puedes agregar más enlaces según sea necesario -->
               </div>
             </div>
-          </div>
-
+          </div >
         {% endfor %}
       </div>
 
+
+
   </div>
 </div>
+<script>
+    function handleDropdownClick(playerId) {
+            console.log(playerId)
+            const dropdown = document.getElementById(`${playerId}`);
+            dropdown.classList.toggle('is-active');
+
+        }
+</script>
 </body>
 <footer class="footer">
         <div class="content has-text-centered">

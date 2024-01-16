@@ -22,7 +22,9 @@
 </div>
 
     <div class="container mt-4">
-        <a href="{{ url_for('player_details', player_id=player_id, player_name=player_name, stat="PTS", graph="bar") }}" class="button is-success is-light">
+        <div class="container mt-4">
+        <div class="mb-2">
+             <a href="{{ url_for('player_details', player_id=player_id, player_name=player_name, stat="PTS", graph="bar") }}" class="button is-success is-light">
         Puntos
         </a>
         <a href="{{ url_for('player_details', player_id=player_id, player_name=player_name, stat="TRB", graph="bar") }}"  class="button is-success   is-light">
@@ -31,6 +33,10 @@
         <a href="{{ url_for('player_details', player_id=player_id, player_name=player_name, stat="AST", graph="bar") }}"  class="button is-success   is-light">
         Asistencias
         </a>
+        <a href="{{ url_for('last_five_games_stats', player_id=player_id, player_name=player_name) }}"  class="button is-success   is-light">
+        Stats last 5 games
+        </a>
+        </div>
         <div class="is-fullwidth">
             <figure class="image" >
                 <img src="data:image/png;base64,{{ img_base64 }}" alt="Player Image">
