@@ -46,7 +46,7 @@
                 <a class="dropdown-item"  href="{{ url_for('player_details', player_id=player_id, player_name=player_name, stat="PTS", graph="bar") }}">Puntos</a>
                 <a class="dropdown-item" href="{{ url_for('player_details', player_id=player_id, player_name=player_name, stat="TRB", graph="bar") }}">Rebotes</a>
                   <a class="dropdown-item" href="{{ url_for('player_details', player_id=player_id, player_name=player_name, stat="AST", graph="bar") }}">Asistencias</a>
-                  <a class="dropdown-item" href="{{ url_for('player_details', player_id=player_id, player_name=player_name, stat="FGA", graph="bar") }}">FGA</a>
+                  <a class="dropdown-item" href="{{ url_for('last_five_games_stats', player_id=player_id, player_name=player_name) }}">Stats Last 5 Games</a>
                 <!-- Puedes agregar más enlaces según sea necesario -->
               </div>
             </div>

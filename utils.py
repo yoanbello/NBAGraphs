@@ -4,6 +4,7 @@ import pandas as pd
 import matplotlib.pyplot as plt
 import io
 import requests
+import numpy as np
 
 def get_graph_pts(player_id, player_name, stat, graph):
     url = f'https://www.basketball-reference.com/players/t/{player_id}/gamelog/2024'
@@ -34,13 +35,12 @@ def get_graph_pts(player_id, player_name, stat, graph):
             bars = plt.bar(dataframe_filtrado['Date'], dataframe_filtrado[f'{stat}'], width=0.8,
                            color="#23D160")  # Gráfico de barras horizontal
             plt.title(f'{stat} by games - {player_name}')  # Título del gráfico
-            plt.xlabel('Fecha')
+            plt.xlabel('Date')
             plt.ylabel(f'{stat}')  # Etiqueta del eje x
             plt.xticks(rotation=90)
             # Añadir el valor de los puntos en la parte superior de cada barra
             for bar, pts in zip(bars, dataframe_filtrado[f'{stat}']):
                 plt.text(bar.get_x() + bar.get_width() / 2, bar.get_height(), str(pts), ha='center', va='bottom')
-
 
 
         if graph == "plot":
@@ -84,4 +84,75 @@ def chunks(lst, n):
     """Divide una lista en n partes"""
     for i in range(0, len(lst), n):
         yield lst[i:i + n]
+
+
+
+def get_graph_last_games(player_id):
+    url = f'https://www.basketball-reference.com/players/{player_id[0]}/{player_id}.html'
+
+    # Lee todas las tablas HTML de la página web
+    tablas_html = pd.read_html(url, attrs={"id": "last5"})
+
+    # Si se encontró la tabla, conviértela a DataFrame
+    if tablas_html:
+        dataframe = tablas_html[0]  # Seleccionar la primera tabla encontrada
+        dataframe.drop(dataframe.columns[[1, 2, 5, -1, -2]], axis=1, inplace=True)
+        df_html = dataframe
+        df_html.replace(np.nan, '-', inplace=True)
+        table_html = df_html.to_html(classes='table is-bordered is-striped is-narrow is-hoverable is-fullwidth', index=False)
+
+        columnas_interesantes = ['MP', 'FG', 'FGA', '3P','3PA','FT', 'FTA', 'ORB', 'DRB', 'TRB','AST', 'STL', 'BLK','TOV',	'PF', 'PTS']
+        promedios = dataframe[columnas_interesantes].mean()
+        # Calcular la suma total de encestos e intentos
+        fg_attempts = dataframe['FGA'].sum()
+        if fg_attempts != 0:
+            fg = dataframe['FG'].sum()
+            fg_percent = (fg / fg_attempts) * 100
+            fg_percent_serie = pd.Series([fg_percent], index=['FG%'])
+            promedios = promedios.append(fg_percent_serie).loc[promedios.index.insert(3, 'FG%')]
+
+        ft_attempts = dataframe['FTA'].sum()
+        if ft_attempts != 0:
+            ft = dataframe['FT'].sum()
+            ft_percent = (ft / ft_attempts) * 100
+            ft_percent_serie = pd.Series([ft_percent], index=['FT%'])
+            promedios = promedios.append(ft_percent_serie).loc[promedios.index.insert(9, 'FT%')]
+
+        fg3_attempts = dataframe['3PA'].sum()
+        if fg3_attempts != 0:
+            fg3 = dataframe['3P'].sum()
+            fg3_percent = (fg3 / fg3_attempts) * 100
+            fg3_percent_serie = pd.Series([fg3_percent], index=['3P%'])
+            promedios = promedios.append(fg3_percent_serie).loc[promedios.index.insert(6, '3P%')]
+
+        plt.figure(figsize=(10, 6))
+
+        # Graficar los promedios
+        bars = plt.bar(promedios.index, promedios.values, color="#23D160")
+
+
+        # Añadir etiquetas encima de cada barra
+        for bar, valor in zip(bars, promedios.values):
+            plt.text(bar.get_x() + bar.get_width() / 2 - 0.1, bar.get_height() + 0.1, f'{valor:.2f}', ha='center', color='black')
+
+        # Añadir etiquetas y título
+        plt.xlabel('Stats')
+        plt.ylabel('Value')
+        plt.title('Averages')
+        plt.tight_layout()  # Ajustar el diseño
+        img = io.BytesIO()
+        plt.savefig(img, format='png')
+        img.seek(0)
+        plt.close()
+
+        # Codificar la imagen en base64 para mostrarla en la página web
+        img_base64 = base64.b64encode(img.getvalue()).decode()
+        return (table_html, img_base64)
+
+
+def capitalize_names(name):
+    name = name.split()  # Dividir el string en palabras
+    palabras_en_mayuscula = [palabra.capitalize() for palabra in name]  # Convertir cada palabra a mayúsculas
+    resultado = ' '.join(palabras_en_mayuscula)  # Unir las palabras de nuevo en un string
+    return resultado
 
