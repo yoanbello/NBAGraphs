@@ -11,7 +11,7 @@ def index(): # put application's code here
 @app.route('/players/')
 def players():  # put application's code here
     players = get_all_players()
-    players = list(chunks(players, 100))
+    #players = list(chunks(players, 200))
     return render_template('players.html', players=players)
 
 @app.route('/players/<player_id>/<player_name>/<stat>/<graph>/')

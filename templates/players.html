@@ -22,11 +22,11 @@
     </nav>
 </div>
 
-    <div class="container mt-4">
+<div class="container mt-4">
   <div class="columns is-mobile">
-    {% for player in players %}
+
       <div class="column">
-        {% for player_id, player_name in player %}
+        {% for player_id, player_name in players %}
           <!-- Agrega la clase 'dropdown' al contenedor del enlace -->
           <div class="dropdown is-hoverable mb-2">
             <div class="dropdown-trigger">
@@ -51,9 +51,10 @@
               </div>
             </div>
           </div>
+
         {% endfor %}
       </div>
-    {% endfor %}
+
   </div>
 </div>
 </body>
